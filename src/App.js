@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import itunes from 'searchitunes';
+import { 
+  Container, Row, Col, 
+  Navbar,
+  InputGroup, InputGroupAddon, InputGroupText, Input,
+  Button,
+  Card, CardImg, CardText, CardBody, CardTitle,
+} from 'reactstrap';
 import { debounce } from 'lodash';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+
+import ResultCard from './ResultCard';
 
 class App extends Component {
   constructor() {
@@ -69,26 +80,39 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div>
-          <input type="search" value={this.state.term} onChange={this.onTermChange} />
-          <button onClick={this.search} >Search</button>
-          <div className="search__suggest">
-            {this.state.suggestions.map((item, i) => {
-              return <div id={item.trackName} key={i} onClick={this.onSuggestionSelect}>{item.trackName}</div>
-            })}
-          </div>
-        </div>
-        <div className="search__results">
-          {this.state.results.map((item, i) => {
-            return (
-              <div key={i} onClick={this.onPreview}>
-                <img src={item.artworkUrl100} alt="artwork"/> 
-                {item.trackName} - {item.artistName}
-                <video src={item.previewUrl} preload="metadata" onClick={this.onPreview}></video>
-              </div>
-            )
-          })}
-        </div>
+        <Container className="search">
+          <Row>
+            <Col>
+              <Navbar>
+                <InputGroup>
+                  <Input value={this.state.term} onChange={this.onTermChange} placeholder="Movie title..." />
+                  <Button color="info" onClick={this.search}>Search</Button>
+                </InputGroup>
+
+                <div className="search__suggest">
+                  {this.state.suggestions.map((item, i) => {
+                    return <div id={item.trackName} key={i} onClick={this.onSuggestionSelect}>{item.trackName}</div>
+                  })}
+                </div>
+              </Navbar>
+            </Col>
+          </Row>
+        </Container>
+
+          <Container className="search__results">
+            <Row>
+                {this.state.results.map((item, i) => {
+                  return (
+                    <ResultCard key={i}
+                      imgsrc={item.artworkUrl100} 
+                      title={item.trackName} 
+                      subtitle={item.artistName}
+                      desc={item.shortDescription}
+                    />
+                  )
+                })}
+            </Row>
+        </Container>
       </div>
     );
   }
