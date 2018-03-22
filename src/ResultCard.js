@@ -8,7 +8,7 @@ const ResultCard = (props) => {
             <CardBody>
                 <CardTitle>{props.title}</CardTitle>
                 <CardSubtitle>{props.subtitle}</CardSubtitle>
-                <CardText>{props.desc}</CardText>
+                <CardText>{props.desc ? props.desc.slice(0,100).concat('...'): ''}</CardText>
                 <Button>{props.preview}</Button>
             </CardBody>
         </Card>

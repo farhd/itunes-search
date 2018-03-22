@@ -24,6 +24,15 @@
 
 .search {
   max-width: 720px;
+  flex-direction: column;
+}
+.search > .row {
+  width: 100%;
+}
+
+.search__suggest {
+  text-align: left;
+  width: 100%;
 }
 
 .search__results .row {

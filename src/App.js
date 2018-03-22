@@ -80,38 +80,33 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Container className="search">
+        <Navbar>
+          <Container className="search">
+            <InputGroup>
+              <Input value={this.state.term} onChange={this.onTermChange} placeholder="Movie title..." />
+              <Button color="info" onClick={this.search}>Search</Button>
+            </InputGroup>
+            <div className="search__suggest">
+              {this.state.suggestions.map((item, i) => {
+                return <div id={item.trackName} key={i} onClick={this.onSuggestionSelect}>{item.trackName}</div>
+              })}
+            </div>
+          </Container>
+        </Navbar>
+
+        <Container className="search__results">
           <Row>
-            <Col>
-              <Navbar>
-                <InputGroup>
-                  <Input value={this.state.term} onChange={this.onTermChange} placeholder="Movie title..." />
-                  <Button color="info" onClick={this.search}>Search</Button>
-                </InputGroup>
-
-                <div className="search__suggest">
-                  {this.state.suggestions.map((item, i) => {
-                    return <div id={item.trackName} key={i} onClick={this.onSuggestionSelect}>{item.trackName}</div>
-                  })}
-                </div>
-              </Navbar>
-            </Col>
+              {this.state.results.map((item, i) => {
+                return (
+                  <ResultCard key={i}
+                    imgsrc={item.artworkUrl100} 
+                    title={item.trackName} 
+                    subtitle={item.artistName}
+                    desc={item.shortDescription ? item.shortDescription : item.longDescription}
+                  />
+                )
+              })}
           </Row>
-        </Container>
-
-          <Container className="search__results">
-            <Row>
-                {this.state.results.map((item, i) => {
-                  return (
-                    <ResultCard key={i}
-                      imgsrc={item.artworkUrl100} 
-                      title={item.trackName} 
-                      subtitle={item.artistName}
-                      desc={item.shortDescription}
-                    />
-                  )
-                })}
-            </Row>
         </Container>
       </div>
     );
