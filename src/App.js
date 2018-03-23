@@ -27,7 +27,8 @@ class App extends Component {
       results: [],
       suggestions: [],
       modal: false,
-      currentPreviewUrl: ''
+      currentPreviewUrl: '',
+      currentPreviewTitle: '',
     }
 
     this.search = this.search.bind(this);
@@ -40,7 +41,7 @@ class App extends Component {
   search() {
     this.setState({suggestions: []});
     let opts = Object.assign({}, this.state.opts, {term: this.state.term});
-    console.log(`Search params: ${JSON.stringify(opts)}`)
+    // console.log(`Search params: ${JSON.stringify(opts)}`)
     itunes(opts)
       .then(resp => {
         this.setState({results: resp.results});
@@ -57,7 +58,7 @@ class App extends Component {
         term: this.state.term,
         limit: 10
       });
-      console.log(`Search params: ${JSON.stringify(opts)}`)
+      // console.log(`Search params: ${JSON.stringify(opts)}`)
       itunes(opts)
         .then(resp => {
           this.setState({suggestions: resp.results});
@@ -74,10 +75,10 @@ class App extends Component {
     });
   }
 
-  onPreview(url) {
-    console.log(url)
+  onPreview(url, title) {
     this.setState({
       currentPreviewUrl: url,
+      currentPreviewTitle: title,
     }, () => {
       this.previewToggle();
     });
@@ -129,7 +130,7 @@ class App extends Component {
         </div>
         
         <Modal isOpen={this.state.modal} toggle={this.previewToggle} className={this.props.className + ' preview'} backdrop={true}>
-          <ModalHeader toggle={this.previewToggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={this.previewToggle}>{this.state.currentPreviewTitle}</ModalHeader>
           <ModalBody>
             <video src={this.state.currentPreviewUrl} autoPlay preload="metadata" controls />
           </ModalBody>
