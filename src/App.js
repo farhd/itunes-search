@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import itunes from 'searchitunes';
 import { 
-  Container, Row, Col, 
+  Container, Row, 
   Navbar,
-  InputGroup, InputGroupAddon, InputGroupText, Input,
+  InputGroup, InputGroupAddon, Input,
   Button,
-  Card, CardImg, CardText, CardBody, CardTitle,
+  Modal, ModalHeader, ModalBody
 } from 'reactstrap';
-import { debounce } from 'lodash';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -26,13 +25,16 @@ class App extends Component {
         limit: 50,
       },
       results: [],
-      suggestions: []
+      suggestions: [],
+      modal: false,
+      currentPreviewUrl: ''
     }
 
     this.search = this.search.bind(this);
     this.onTermChange = this.onTermChange.bind(this);
     this.onPreview = this.onPreview.bind(this);
     this.onSuggestionSelect = this.onSuggestionSelect.bind(this);
+    this.previewToggle = this.previewToggle.bind(this);
   }
 
   search() {
@@ -66,9 +68,19 @@ class App extends Component {
     });
   }
 
-  onPreview(e) {
-    let vid = e.target;
-    
+  previewToggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  onPreview(url) {
+    console.log(url)
+    this.setState({
+      currentPreviewUrl: url,
+    }, () => {
+      this.previewToggle();
+    });
   }
 
   onSuggestionSelect(e) {
@@ -115,6 +127,14 @@ class App extends Component {
             </Row>
           </Container>
         </div>
+        
+        <Modal isOpen={this.state.modal} toggle={this.previewToggle} className={this.props.className + ' preview'} backdrop={true}>
+          <ModalHeader toggle={this.previewToggle}>Modal title</ModalHeader>
+          <ModalBody>
+            <video src={this.state.currentPreviewUrl} autoPlay preload="metadata" controls />
+          </ModalBody>
+        </Modal>
+      
       </div>
     );
   }

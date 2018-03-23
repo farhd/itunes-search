@@ -9,7 +9,7 @@ const ResultCard = (props) => {
         <CardTitle>{props.title}</CardTitle>
         <CardSubtitle>{props.subtitle}</CardSubtitle>
         <CardText>{props.desc ? props.desc.slice(0,100).concat('...'): ''}</CardText>
-        <Button onClick={props.onPreview}>Preview</Button>
+        <Button onClick={props.onPreview.bind(null, props.previewUrl)}>Preview</Button>
       </CardBody>
     </Card>
   );
