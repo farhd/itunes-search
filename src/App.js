@@ -36,6 +36,7 @@ class App extends Component {
   }
 
   search() {
+    this.setState({suggestions: []});
     let opts = Object.assign({}, this.state.opts, {term: this.state.term});
     console.log(`Search params: ${JSON.stringify(opts)}`)
     itunes(opts)
@@ -67,12 +68,12 @@ class App extends Component {
 
   onPreview(e) {
     let vid = e.target;
-    console.log(vid.networkState, vid.readyState)
+    
   }
 
   onSuggestionSelect(e) {
     let newVal = e.target.id;
-    this.setState({term: newVal, suggestions: []}, () => {
+    this.setState({term: newVal}, () => {
       this.search();
     });
   }
@@ -84,7 +85,9 @@ class App extends Component {
           <Container className="search">
             <InputGroup>
               <Input value={this.state.term} onChange={this.onTermChange} placeholder="Movie title..." />
-              <Button color="info" onClick={this.search}>Search</Button>
+              <InputGroupAddon addonType="append">
+                <Button color="info" onClick={this.search}>Search</Button>
+              </InputGroupAddon>
             </InputGroup>
             <div className="search__suggest">
               {this.state.suggestions.map((item, i) => {
@@ -93,9 +96,10 @@ class App extends Component {
             </div>
           </Container>
         </Navbar>
-
-        <Container className="search__results">
-          <Row>
+        
+        <div className="search__results">
+          <Container>
+            <Row>
               {this.state.results.map((item, i) => {
                 return (
                   <ResultCard key={i}
@@ -103,11 +107,14 @@ class App extends Component {
                     title={item.trackName} 
                     subtitle={item.artistName}
                     desc={item.shortDescription ? item.shortDescription : item.longDescription}
+                    onPreview={this.onPreview}
+                    previewUrl={item.previewUrl}
                   />
                 )
               })}
-          </Row>
-        </Container>
+            </Row>
+          </Container>
+        </div>
       </div>
     );
   }
